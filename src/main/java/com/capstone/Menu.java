@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Menu {
         static Scanner sc = new Scanner(System.in);
 
-    static char mainMenu(){
+    static void mainMenu(){
 
         char choosenChar = ' ';
         boolean isValid = false;
@@ -27,11 +27,28 @@ public class Menu {
             }
 
         }
-        return choosenChar;
+        switch (choosenChar){
+            case 'd':
+                    System.out.println("Deposit");
+                break;
+            case 'p':
+                    System.out.println("Make payment");
+                break;
+            case 'l':
+                System.out.println("ledger");
+                ledgerMenu();
+                break;
+            case 'x':
+                System.out.println("Bye bye");
+                break;
+            default:
+                System.out.println("Invalid input.");
+                break;
+        }
     }
 
 
-    static char ledgerMenu(){
+    static void ledgerMenu(){
 
         char choosenChar = ' ';
         boolean isValid = false;
@@ -52,10 +69,30 @@ public class Menu {
                 System.out.println("Invalid input, Please enter the character assigned to the menu.");
             }
         }
-        return choosenChar;
+        switch (choosenChar){
+            case 'a':
+                System.out.println("a");
+                break;
+            case 'd':
+                System.out.println("Deposit");
+                break;
+            case 'p':
+                System.out.println("Make payment");
+                break;
+            case 'r':
+                System.out.println("reports");
+                reportsMenu();
+            case 'h':
+                System.out.println("home");
+                mainMenu();
+                break;
+            default:
+                System.out.println("Invalid input.");
+                break;
+        }
     }
 
-    static char reportsMenu(){
+    static void reportsMenu(){
         char choosenChar = ' ';
         boolean isValid = false;
 
@@ -77,6 +114,30 @@ public class Menu {
                 System.out.println("Invalid input, Please enter the character assigned to the menu.");
             }
         }
-        return choosenChar;
+        switch (choosenChar){
+
+            case '0':
+                System.out.println("0");
+                ledgerMenu();
+                break;
+            case '1':
+                System.out.println("1");
+                break;
+            case '2':
+                System.out.println("2");
+                break;
+            case '3':
+                System.out.println("3");
+                break;
+            case '4':
+                System.out.println("4");
+                break;
+            case '5':
+                System.out.println("5");
+                break;
+            default:
+                System.out.println("Invalid input.");
+                break;
+        }
     }
 }
