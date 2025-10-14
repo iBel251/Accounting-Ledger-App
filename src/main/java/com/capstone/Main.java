@@ -2,29 +2,12 @@ package com.capstone;
 
 import java.util.Scanner;
 
+import static com.capstone.Menu.mainMenu;
+
 public class Main {
     public static void main(String[] args){
 
-        Scanner sc = new Scanner(System.in);
-        boolean isRunning = true;
-
-        while (isRunning){
-            System.out.println("Please choose the letter form the options below.");
-            System.out.println("D - Add Deposit");
-            System.out.println("P - Make Payment");
-            System.out.println("L - Ledger");
-            System.out.println("X - Exit");
-
-            char input = Character.toLowerCase(sc.next().charAt(0));
-
-            if(input != 'x' ){
-                optionDisplay(input);
-            }else{
-                System.out.println("System Closing...");
-                isRunning = false;
-            }
-
-        }
+        optionDisplay(mainMenu());
     }
 
     static void optionDisplay(char chooseOption){
@@ -38,6 +21,9 @@ public class Main {
                 break;
             case 'l':
                 System.out.println("Ledger");
+                break;
+            case 'x':
+                System.out.println("Bye bye");
                 break;
             default:
                 System.out.println("Invalid input.");
