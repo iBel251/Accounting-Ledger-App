@@ -29,7 +29,7 @@ public class Menu {
         }
         switch (choosenChar){
             case 'd':
-                    System.out.println("Deposit");
+                    Services.addDeposit(sc);
                 break;
             case 'p':
                     System.out.println("Make payment");
