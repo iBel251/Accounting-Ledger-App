@@ -104,7 +104,7 @@ public class Menu {
             System.out.println("Choose the report type you want to be displayed.");
             System.out.println("1 - month to Date");
             System.out.println("2 - Previous Month");
-            System.out.println("3 - Year to Year");
+            System.out.println("3 - Year to Date");
             System.out.println("4 - Previous Year");
             System.out.println("5 - Search by Vendor");
             System.out.println("0 - Back");
@@ -125,19 +125,22 @@ public class Menu {
                 ledgerMenu();
                 break;
             case '1':
-                System.out.println("1");
+                Services.showReports("MonthToDate");
                 break;
             case '2':
-                System.out.println("2");
+                Services.showReports("PreviousMonth");
                 break;
             case '3':
-                System.out.println("3");
+                Services.showReports("YearToDate");
                 break;
             case '4':
-                System.out.println("4");
+                Services.showReports("PreviousYear");
                 break;
             case '5':
-                System.out.println("5");
+                System.out.print("Enter vendor name: ");
+                String input = sc.nextLine();
+
+                Services.customSearch("vendor", input);
                 break;
             default:
                 System.out.println("Invalid input.");

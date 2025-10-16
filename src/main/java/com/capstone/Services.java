@@ -31,7 +31,7 @@ public class Services {
 
         //format the values to be stored on to the csv file then call csvWriter to store it.
         String transaction = String.join("|",t.getDate(),t.getTime(),t.getDescription(),t.getVendor(),t.getAmount()+"");
-        csvWriter(transaction);
+        Tools.csvWriter(transaction);
 
     }
 
@@ -46,22 +46,24 @@ public class Services {
                 String[] values = line.split("\\|");
 
                 if(values[4].equalsIgnoreCase("amount")){
-                    System.out.println(line);
+                    Tools.headerFormatter();
                     continue;
                 }
+
+                Transaction t = createTransactionObject(line);
 
                 double amount = Double.parseDouble(values[4]);
 
                 if(type.equalsIgnoreCase("payment")){
                     if(amount < 0){
-                        System.out.println(line);
+                        t.printFormatter();
                     }
                 }else if(type.equalsIgnoreCase("deposit")){
                     if(amount > 0){
-                        System.out.println(line);
+                        t.printFormatter();
                     }
                 }else{
-                    System.out.println(line);
+                    t.printFormatter();
                 }
             }
         }catch (IOException e){
@@ -69,21 +71,119 @@ public class Services {
         }
     }
 
-    //Accepts the provided inputs in string format,
-    // check if the file transactions.csv exist (create it with headers if not)
-    // then append the transaction on new line.)
-    public static void csvWriter(String transaction){
-        File file = new File("transactions.csv");
-        boolean fileExists = file.exists() && file.length() > 0;
-        try{
-            FileWriter writer = new FileWriter(file,true);
-            if(!fileExists){
-                writer.write("date|time|description|vendor|amount\n");
+    public static void showReports(String type){
+        File ledger = new File("transactions.csv");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(ledger))) {
+            String line;
+            while((line = reader.readLine()) != null){
+                String[] sections = line.split("\\|");
+
+                //Print the first header line before applying any filters
+                if(sections[4].equalsIgnoreCase("amount")){
+                    Tools.headerFormatter();
+                    continue;
+                }
+
+                // Create an object from the values of the transaction.
+                Transaction t = createTransactionObject(line);
+
+                //Parse the date section in to date format and extract the month and date in order to do the filtering.
+                LocalDate transactionDate = LocalDate.parse(sections[0]);
+                int transactionMonth = transactionDate.getMonthValue();
+                int transactionYear = transactionDate.getYear();
+
+                //Get the current date, year and month values
+                LocalDate today = LocalDate.now();
+                int currentMonth = today.getMonthValue();
+                int currentYear = today.getYear();
+
+                switch (type){
+                    case "MonthToDate" :{
+                        if(transactionMonth == currentMonth && transactionYear == currentYear){
+                            t.printFormatter();
+                        }
+                        break;
+                    }
+                    case "PreviousMonth" :{
+                        if(transactionMonth + 1 == currentMonth && transactionYear == currentYear){
+                            t.printFormatter();
+                        }
+                        break;
+                    }
+                    case "YearToDate" :{
+                        if(transactionYear == currentYear){
+                            t.printFormatter();
+                        }
+                        break;
+                    }
+                    case "PreviousYear" :{
+                        if(transactionYear + 1 == currentYear){
+                            t.printFormatter();
+                        }
+                        break;
+                    }
+                }
             }
-            writer.write(transaction + "\n");
-            writer.close();
-        }catch(IOException e){
-            System.out.println("Error on file" + e.getMessage());
+            Menu.reportsMenu();
+
+        }catch (IOException e){
+            System.out.println("Error on file." + e.getMessage());
+        }
+    }
+
+    public static Transaction createTransactionObject(String transaction){
+        String[] sections = transaction.split("\\|");
+        String date = sections[0];
+        String time = sections[1];
+        String description = sections[2];
+        String vendor = sections[3];
+        double amount = Double.parseDouble(sections[4]);
+
+        return new Transaction(date, time, description, vendor, amount);
+    }
+
+    public static void customSearch(String searchBy, String input){
+        File ledger = new File("transactions.csv");
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(ledger))){
+            String line;
+            while((line = reader.readLine()) != null){
+                String[] sections = Tools.transactionSplitter(line);
+
+                if(sections[4].equalsIgnoreCase("amount")){
+                    Tools.headerFormatter();
+                    continue;
+                }
+
+                Transaction t = createTransactionObject(line);
+
+                switch (searchBy){
+                    case "vendor":{
+                        if(sections[3].toLowerCase().contains(input.toLowerCase())){
+                            t.printFormatter();
+                        }
+                        break;
+                    }
+                    case "description":{
+                        if(sections[2].contains(input)){
+                            t.printFormatter();
+                        }
+                        break;
+                    }
+                    case "amount":{
+                        if(sections[4].equalsIgnoreCase(input)){
+                            t.printFormatter();
+                        }
+                        break;
+                    }
+                    default:
+                        System.out.println("No matching record found.");
+                        break;
+                }
+            }
+        }catch (IOException e){
+            System.out.println("Error reading file." + e.getMessage());
         }
     }
 

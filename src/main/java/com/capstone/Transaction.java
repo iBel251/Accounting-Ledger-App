@@ -31,4 +31,15 @@ public class Transaction {
     public String getDate() {
         return date;
     }
+
+    public void printFormatter(){
+        System.out.printf("%-12s \u001B[33m%-8s\u001B[0m %-20s %-15s", date, time, description, vendor);
+        if (amount < 0) {
+            //make amount red if it is negative(payment)
+            System.out.printf("\u001B[31m%10.2f\u001B[0m%n", amount);
+        } else {
+            // default color for positive (for deposits)
+            System.out.printf("%10.2f%n", amount);
+        }
+    }
 }
