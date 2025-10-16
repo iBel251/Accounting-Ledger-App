@@ -1,7 +1,5 @@
 package com.capstone;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -9,7 +7,9 @@ import java.util.Scanner;
 
 public class Services {
 
-    public static void addDeposit(Scanner sc){
+    //Add transaction will handle both deposit and payment, the type will be passed to it as an argument.
+    // Type (Deposit or Payment)
+    public static void addTransaction(Scanner sc, String type){
         System.out.println("Enter the transaction details.");
 
         String vendor = Validators.validateString("Vendor: ", sc);
@@ -22,6 +22,10 @@ public class Services {
         String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String formattedTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
+        //If user is recording payment then the amount will be saved as a negative amount on the ledger.
+        if(type.equalsIgnoreCase("payment")){
+            amount = -amount;
+        }
         //create transaction object
         Transaction t = new Transaction(formattedDate, formattedTime, description, vendor, amount);
 
@@ -29,6 +33,40 @@ public class Services {
         String transaction = String.join("|",t.getDate(),t.getTime(),t.getDescription(),t.getVendor(),t.getAmount()+"");
         csvWriter(transaction);
 
+    }
+
+    public static void showTransactions(String type){
+        File ledger = new File("transactions.csv");
+
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(ledger))){
+            String line;
+            while((line = reader.readLine()) != null){
+
+                String[] values = line.split("\\|");
+
+                if(values[4].equalsIgnoreCase("amount")){
+                    System.out.println(line);
+                    continue;
+                }
+
+                double amount = Double.parseDouble(values[4]);
+
+                if(type.equalsIgnoreCase("payment")){
+                    if(amount < 0){
+                        System.out.println(line);
+                    }
+                }else if(type.equalsIgnoreCase("deposit")){
+                    if(amount > 0){
+                        System.out.println(line);
+                    }
+                }else{
+                    System.out.println(line);
+                }
+            }
+        }catch (IOException e){
+            System.out.println("Error!" + e.getMessage());
+        }
     }
 
     //Accepts the provided inputs in string format,

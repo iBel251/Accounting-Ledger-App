@@ -29,13 +29,14 @@ public class Menu {
         }
         switch (choosenChar){
             case 'd':
-                    Services.addDeposit(sc);
+                    Services.addTransaction(sc, "deposit");
+                    mainMenu();
                 break;
             case 'p':
-                    System.out.println("Make payment");
+                    Services.addTransaction(sc, "payment");
+                    mainMenu();
                 break;
             case 'l':
-                System.out.println("ledger");
                 ledgerMenu();
                 break;
             case 'x':
@@ -43,6 +44,7 @@ public class Menu {
                 break;
             default:
                 System.out.println("Invalid input.");
+                mainMenu();
                 break;
         }
     }
@@ -71,23 +73,25 @@ public class Menu {
         }
         switch (choosenChar){
             case 'a':
-                System.out.println("a");
+                Services.showTransactions("All");
+                ledgerMenu();
                 break;
             case 'd':
-                System.out.println("Deposit");
+                Services.showTransactions("Deposit");
+                ledgerMenu();
                 break;
             case 'p':
-                System.out.println("Make payment");
+                Services.showTransactions("Payment");
+                ledgerMenu();
                 break;
             case 'r':
-                System.out.println("reports");
                 reportsMenu();
             case 'h':
-                System.out.println("home");
                 mainMenu();
                 break;
             default:
                 System.out.println("Invalid input.");
+                ledgerMenu();
                 break;
         }
     }
