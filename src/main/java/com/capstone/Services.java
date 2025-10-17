@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+import static com.capstone.Menu.sc;
+
 public class Services {
 
     //Add transaction will handle both deposit and payment, the type will be passed to it as an argument.
@@ -66,6 +68,9 @@ public class Services {
                     t.printFormatter();
                 }
             }
+            System.out.println("-----------------------------------------------------------------------");
+
+            Tools.enterToContinue();
         }catch (IOException e){
             System.out.println("Error!" + e.getMessage());
         }
@@ -125,6 +130,9 @@ public class Services {
                     }
                 }
             }
+            System.out.println("-----------------------------------------------------------------------");
+
+            Tools.enterToContinue();
             Menu.reportsMenu();
 
         }catch (IOException e){
@@ -166,13 +174,14 @@ public class Services {
                         break;
                     }
                     case "description":{
-                        if(sections[2].contains(input)){
+                        if(sections[2].toLowerCase().contains(input.toLowerCase())){
                             t.printFormatter();
                         }
                         break;
                     }
                     case "amount":{
-                        if(sections[4].equalsIgnoreCase(input)){
+                        double amount = Double.parseDouble(sections[4]);
+                        if(Math.abs(amount) == Math.abs(Double.parseDouble(input))){
                             t.printFormatter();
                         }
                         break;
@@ -182,6 +191,10 @@ public class Services {
                         break;
                 }
             }
+            System.out.println("-----------------------------------------------------------------------");
+
+            Tools.enterToContinue();
+            Menu.reportsMenu();
         }catch (IOException e){
             System.out.println("Error reading file." + e.getMessage());
         }
