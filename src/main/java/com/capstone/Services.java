@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import static com.capstone.Menu.sc;
+import static com.capstone.StringFormatter.*;
 
 public class Services {
 
@@ -197,6 +198,48 @@ public class Services {
             Menu.reportsMenu();
         }catch (IOException e){
             System.out.println("Error reading file." + e.getMessage());
+        }
+    }
+
+    public static void displaySummary(){
+        File ledger = new File("transactions.csv");
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(ledger))){
+            String line = " ";
+            double totalSales = 0.0;
+            double totalExpense = 0.0;
+
+            while((line = reader.readLine()) != null){
+                String[] values = line.split("\\|");
+
+                //Skip the header
+                if(values[4].equalsIgnoreCase("amount")){
+                    continue;
+                }
+                double amount = Double.parseDouble(values[4]);
+
+                //For negative values, add them all as expense and the rest as sales
+                if(amount < 0){
+                    totalExpense += amount;
+                } else {
+                    totalSales += amount;
+                }
+
+            }
+
+            double netProfit = totalSales + totalExpense;
+
+            System.out.printf("%n" + YELLOW + "==================== " + UNDERLINE + "SalesCorp Summary Report" + RESET + YELLOW + " ====================%n" + RESET);
+            System.out.printf("%-20s : " + GREEN + "$%.2f%n" + RESET, "Total Sales", totalSales);
+            System.out.printf("%-20s : " + RED + "$%.2f%n" + RESET, "Total Expenses", Math.abs(totalExpense));
+            System.out.println("------------------------------------------------------");
+            System.out.printf("%-20s : " + (netProfit >= 0 ? GREEN : RED) + "$%.2f%n" + RESET, "Net Profit", netProfit);
+            System.out.println("======================================================");
+
+            Tools.enterToContinue();
+
+        }catch (IOException e){
+            System.out.println("Error reading CSV vile. "+ e.getMessage());
         }
     }
 

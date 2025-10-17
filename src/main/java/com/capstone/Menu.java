@@ -12,30 +12,35 @@ public class Menu {
         boolean isValid = false;
 
         while (!isValid){
-            System.out.printf(YELLOW+"%n################### "+UNDERLINE+"Main Menu"+RESET+YELLOW+" ###################%n"+RESET);
+            System.out.printf(YELLOW + "%n==================== " + BOLD + UNDERLINE + "Salescorp Main Menu" + RESET +
+                    YELLOW + " ====================%n" + RESET);
 
-            System.out.println("Please choose the letter form the options below.");
-            System.out.println("D - Add Deposit");
-            System.out.println("P - Make Payment");
-            System.out.println("L - Ledger");
-            System.out.println("X - Exit");
+            System.out.println("Welcome to your online seller ledger!");
+            System.out.println("Manage your product sales, expenses, and business reports.\n");
+
+            System.out.println("S - Add New Sale");
+            System.out.println("E - Record Expense");
+            System.out.println("L - View Ledger");
+            System.out.println("X - Exit Application");
+
+            System.out.print(BLUE + "Select an option to continue: " + RESET);
 
             String input = sc.nextLine().toLowerCase().trim();
 
-            if(input.length() == 1 && "dplx".contains(input)){
+            if(input.length() == 1 && "selx".contains(input)){
                 isValid = true;
                 choosenChar = input.charAt(0);
             }else{
-                System.out.printf("%n"+RED+"Invalid input!"+RESET+" Please enter D, P, L, or X.%n");
+                System.out.printf("%n"+RED+"Invalid input!"+RESET+" Please enter the character assigned to the menu.%n");
             }
 
         }
         switch (choosenChar){
-            case 'd':
+            case 's':
                     Services.addTransaction(sc, "deposit");
                     mainMenu();
                 break;
-            case 'p':
+            case 'e':
                     Services.addTransaction(sc, "payment");
                     mainMenu();
                 break;
@@ -59,15 +64,16 @@ public class Menu {
         boolean isValid = false;
 
         while(!isValid){
-            System.out.printf(YELLOW+"%n################### "+UNDERLINE+"Ledger Menu"+RESET+YELLOW+" ###################%n"+RESET);
-            System.out.println("A - All");
-            System.out.println("D - Deposits");
-            System.out.println("P - Payments");
-            System.out.println("R - Reports");
-            System.out.println("H - Home");
+            System.out.printf(YELLOW+"%n==================== "+UNDERLINE+"Salescorp Ledger Menu"+RESET+YELLOW+" ====================%n"+RESET);
+            System.out.println("A - View All Records");
+            System.out.println("S - View Sales Only");
+            System.out.println("E - View Expenses Only");
+            System.out.println("R - Reports & Summaries");
+            System.out.println("H - Return to Home Menu");
 
+            System.out.print(BLUE + "What would you like to view? " + RESET);
             String input = sc.nextLine().toLowerCase().trim();
-            if(input.length() == 1 && "adprh".contains(input)){
+            if(input.length() == 1 && "aserh".contains(input)){
                 isValid = true;
                 choosenChar = input.charAt(0);
             }else{
@@ -79,11 +85,11 @@ public class Menu {
                 Services.showTransactions("All");
                 ledgerMenu();
                 break;
-            case 'd':
+            case 's':
                 Services.showTransactions("Deposit");
                 ledgerMenu();
                 break;
-            case 'p':
+            case 'e':
                 Services.showTransactions("Payment");
                 ledgerMenu();
                 break;
@@ -104,9 +110,8 @@ public class Menu {
         boolean isValid = false;
 
         while(!isValid){
-            System.out.printf(YELLOW+"%n################### "+UNDERLINE+"Reports"+RESET+YELLOW+" ###################%n"+RESET);
+            System.out.printf(YELLOW+"%n====================  "+UNDERLINE+"Salescorp Reports"+RESET+YELLOW+" ====================%n"+RESET);
 
-            System.out.println("Choose the report type you want to be displayed.");
             System.out.println("1 - month to Date");
             System.out.println("2 - Previous Month");
             System.out.println("3 - Year to Date");
@@ -114,11 +119,13 @@ public class Menu {
             System.out.println("5 - Search by Vendor");
             System.out.println("6 - Search by Amount");
             System.out.println("7 - Search by Description");
+            System.out.println("8 - Summary");
             System.out.println("0 - Back");
 
+            System.out.print(BLUE + "Select a report option to continue: " + RESET);
             String input = sc.nextLine().toLowerCase().trim();
 
-            if(input.length() == 1 && "01234567".contains(input)){
+            if(input.length() == 1 && "012345678".contains(input)){
                 isValid = true;
                 choosenChar = input.charAt(0);
             }else{
@@ -162,12 +169,9 @@ public class Menu {
 
                 Services.customSearch("description", description);
                 break;
-//            case '8':
-//                System.out.print("Enter vendor name: ");
-//                String input = sc.nextLine();
-//
-//                Services.customSearch("vendor", input);
-//                break;
+            case '8':
+                Services.displaySummary();
+                break;
             default:
                 System.out.println("Invalid input.");
                 break;

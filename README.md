@@ -53,6 +53,9 @@ This project demonstrates several **core Java concepts**:
   <img src="screenshots/reportsmenu.png" width="80%"/>
 </p>
 <p align="center">
+  <img src="screenshots/summary.png" width="80%"/>
+</p>
+<p align="center">
   <img src="screenshots/list.png" width="80%"/>
 </p>
 
@@ -144,8 +147,8 @@ Accounting-Ledger-App/
 │       ├── Menu.java
 │       ├── Services.java
 │       ├── Transaction.java
-│       └── StringFormatter.java
-│       └── Tools.java
+│       ├── StringFormatter.java
+│       ├── Tools.java
 │       └── Validators.java
 │
 └── transactions.txt
